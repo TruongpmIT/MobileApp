@@ -1,11 +1,15 @@
 package com.example.mobileapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -14,12 +18,14 @@ import android.widget.Toast;
 import com.example.mobileapp.dao.HikeDAO;
 import com.example.mobileapp.model.Hike;
 
+import java.util.Calendar;
+
 public class EditActivity extends AppCompatActivity {
 
     private EditText edtName, edtLocation,edtDate, edtLength,edtLevel,edtDescription, edtRisk,edtVehicle,edtEstimatedTime;
     private RadioGroup rgParking;
     private RadioButton rbYes, rbNo;
-    private Button btnSave, btnCancel;
+    private Button btnSave, btnCancel,btnDelete ;
     private HikeDAO hikeDAO;
     private String parking;
     @Override
@@ -53,6 +59,7 @@ public class EditActivity extends AppCompatActivity {
             }
         });
 
+
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,6 +77,7 @@ public class EditActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"Save Successfull",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(EditActivity.this, MainActivity.class);
                 startActivity(intent);
+
             }
         });
 
@@ -98,5 +106,47 @@ public class EditActivity extends AppCompatActivity {
         rgParking = (RadioGroup) findViewById(R.id.rg_parking);
         btnSave = (Button) findViewById(R.id.btn_save);
         btnCancel = (Button) findViewById(R.id.btn_cancel);
+        edtDate.setOnClickListener(view -> {
+            AddActivity.MyDatePicker dlg = new AddActivity.MyDatePicker();
+            dlg.setDateField(edtDate);
+            dlg.show(getSupportFragmentManager(), "Hike date!");
+        });
+    }
+    public static class MyDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+        public void setDateField(EditText dateField) {
+            this.dateField = dateField;
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            if (dateField.getText().length() != 0) {
+                String date = dateField.getText().toString();
+                String[] separated = date.split("/");
+                int year = Integer.parseInt(separated[2]);
+                int month = Integer.parseInt(separated[1]);
+                int day = Integer.parseInt(separated[0]);
+                return new DatePickerDialog(getActivity(), this, year, month - 1, day);
+
+            } else {
+                final Calendar c = Calendar.getInstance();
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int day = c.get(Calendar.DAY_OF_MONTH);
+                return new DatePickerDialog(getActivity(), this, year, month, day);
+            }
+            // Create a new instance of DatePickerDialog and return it
+        }
+
+        private EditText dateField;
+
+        @Override
+        public void onDateSet(DatePicker datePicker, int selectedYear,
+                              int selectedMonth, int selectedDay) {
+            String dateReturn = selectedDay + "/" + (selectedMonth + 1) + "/"
+                    + selectedYear;
+            dateField.setText(dateReturn);
+
+        }
     }
 }

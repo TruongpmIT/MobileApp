@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         lvHike.setAdapter(adapter);
         CRUD_Listview();
 
+
     }
 
     private void CRUD_Listview() {
