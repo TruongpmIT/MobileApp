@@ -81,12 +81,12 @@ public class HikeDAO { //DAO (DATA ACCESS OBJECT) Co nhiem vu truy van du lieu
         String idHike = String.valueOf(hike.getId());
         String idHikes[] = {idHike};
         database.update("Hike",values,"id=?",idHikes);
+
     }
     //Delete hike
     public void DeleteHike(Hike hike){
         SQLiteDatabase database = db.getWritableDatabase();
         String idHike = String.valueOf(hike.getId());
-        String idHikes[] = {idHike};
-        database.delete("Hike","id=?",idHikes);
+        database.delete("Hike","id=?", new String[]{String.valueOf(idHike)});
     }
 }

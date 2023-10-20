@@ -91,6 +91,16 @@ public class EditActivity extends AppCompatActivity {
                 }
             }
         });
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hikeDAO.DeleteHike(hike);
+                Toast.makeText(getApplicationContext(),"Delete Successfull",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(EditActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void AnhXa() {
@@ -106,6 +116,7 @@ public class EditActivity extends AppCompatActivity {
         rgParking = (RadioGroup) findViewById(R.id.rg_parking);
         btnSave = (Button) findViewById(R.id.btn_save);
         btnCancel = (Button) findViewById(R.id.btn_cancel);
+        btnDelete =(Button) findViewById(R.id.btn_delete);
         edtDate.setOnClickListener(view -> {
             AddActivity.MyDatePicker dlg = new AddActivity.MyDatePicker();
             dlg.setDateField(edtDate);
